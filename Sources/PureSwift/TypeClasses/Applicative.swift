@@ -5,7 +5,10 @@
 //  Created by Manaswi Daksha on 12/20/21.
 //
 
-infix operator <*>
+precedencegroup AmapGroup {}
+infix operator <*>: AmapGroup
+infix operator *>: AmapGroup
+infix operator <*: AmapGroup
 /// An **Applicative Functor** has more structure than a **Functor**.
 ///
 /// It can:

@@ -5,6 +5,9 @@
 //  Created by Manaswi Daksha on 12/20/21.
 //
 
+precedencegroup SemigroupGroup {
+    higherThan: PipeGroup
+}
 infix operator <>
 /// The **Semigroup** typeclass represents a set with an associative binary operation.
 ///
@@ -17,6 +20,11 @@ infix operator <>
 /// ```
 /// (a <> b) <> c == a <> (b <> c)
 /// ```
+///
+/// **NOTES:**
+///
+/// * Wrappers will always be associative if the wrapped type is a Semigroup and also associative
+/// * Check the implementation of Optional to see how to conform to Semigroup on Types that wrap. 
 protocol Semigroup {
     /// The "combine" operator
     static func <>(a: Self, b: Self) -> Self

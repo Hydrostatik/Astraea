@@ -32,8 +32,4 @@ extension Monoid {
     static func mconcat(_ vals: [Self]) -> Self {
         vals.reduce(mempty, <>)
     }
-
-    static func mappend(a: Self, b: Self) -> Self {
-        combine(a, b)
-    }
 }

@@ -5,8 +5,11 @@
 //  Created by Manaswi Daksha on 12/20/21.
 //
 
-infix operator <&>
-infix operator <&
+precedencegroup MapGroup {
+    higherThan: AmapGroup
+}
+infix operator <&>: MapGroup
+infix operator <&: MapGroup
 /// The **Functor** typeclass represents a mapping between categories in the context of
 /// category theory.
 ///
