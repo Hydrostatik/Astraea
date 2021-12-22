@@ -32,10 +32,55 @@ final class OptionalExtensionTests: XCTestCase {
 
     func testFunctor_Fmap() {
         XCTAssertEqual(String.init <&> Optional(3), Optional("3"))
+        XCTAssertEqual(Optional.fmap(Optional(3)) { x in String.init <| x } , Optional("3"))
     }
 
     func testFunctor_ReplaceMap() {
-        XCTAssertEqual("This is Sparta" <& Optional(3), Optional("This is Sparta"))
+        XCTAssertEqual("This is Sparta" <& Optional.init <| 3, Optional.init <| "This is Sparta")
+    }
+
+    func testApplicativeFunctor_Pure() {
+        XCTAssertEqual(Optional.pure <| 3, Optional.init <| 3)
+    }
+
+    func testApplicativeFunctor_Amap() {
+        let given: Optional<(Int) -> String> = { x in
+            String.init <| 4 * x 
+        }
+
+        let sut1: Optional<Int> = 4
+        let sut2: Optional<Int> = nil
+
+        XCTAssertEqual(given <*> sut1, "16")
+        XCTAssertEqual(given <*> sut2, nil)
+    }
+
+    func testApplicativeFunctor_IdentityLaw() {
+        XCTAssertEqual(Optional.pure <| { x in x } <*> Optional.init <| 3, 3)
+    }
+
+    func testApplicativeFunctor_CompositionLaw() {
+        let given1: Optional<(String) -> Bool> = { x in x.count > 3 }
+        let given2: Optional<(Int) -> String> = { x in String.init <| 80 * x }
+        let given3: Optional<Int> = 20
+
+        XCTAssertEqual(Optional.pure <| { f in { g in f <+ g }} <*> given1 <*> given2 <*> given3, given1 <*> (given2 <*> given3))
+    }
+
+    func testApplicativeFunctor_HomomorphismLaw() {
+        XCTAssertEqual(Optional.pure <| { (x: Int) in Double.init <| 2 * x } <*> Optional.pure <| 3, Optional.pure <| { (x: Int) in Double.init <| 2 * x } <| 3)
+    }
+
+    func testApplicativeFunctor_InterchangeLaw() {
+        XCTAssertEqual(Optional.init <| { x in x * 20 } <*> Optional.pure <| 30, Optional.pure <| { f in f <| 30 } <*> Optional.init <| { x in x * 20 })
+    }
+
+    func testApplicativeFunctor_LeftApply() {
+        XCTAssertEqual(Optional(4) <* Optional("String"), Optional(4))
+    }
+
+    func testApplicativeFunctor_RightApply() {
+        XCTAssertEqual(Optional(4) *> Optional("String"), Optional("String"))
     }
 }
 

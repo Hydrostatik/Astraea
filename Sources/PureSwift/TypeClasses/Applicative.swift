@@ -5,7 +5,9 @@
 //  Created by Manaswi Daksha on 12/20/21.
 //
 
-precedencegroup AmapGroup {}
+precedencegroup AmapGroup {
+    associativity: left
+}
 infix operator <*>: AmapGroup
 infix operator *>: AmapGroup
 infix operator <*: AmapGroup
@@ -42,7 +44,7 @@ infix operator <*: AmapGroup
 protocol Applicative: Functor {
 
     /// Embeds a pure expression inside itself. 
-    func pure(_ a: Self.A) -> Self
+    static func pure(_ a: Self.A) -> Self
 
     /// Cannot be required since protocols don't support required notation
     /// static func amap<B>(_ a: Implementation<(A) -> B>, _ b: Implementation<A>) -> Implementation<B>

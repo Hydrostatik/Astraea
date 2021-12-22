@@ -32,10 +32,17 @@ protocol Functor {
 }
 
 extension Functor {
-    static func fmap <B>(_ a: Self,_ f: @escaping (A) -> B) -> Self where Self.A == B {
+    static func fmap <B>(_ a: Self, _ f: @escaping (A) -> B) -> Self where Self.A == B {
         f <&> a
     }
 
+    /// **WARNING:** Do not use the default implementation
+    /// Use the following:
+    /// ``` swift
+    /// static func <& <T>(a: A, b: Optional<T>) -> Optional<A> {
+    ///     { _ in a } <&> b
+    /// }
+    /// ```
     static func <& (a: Self.A, b: Self) -> Self {
         { _ in a } <&> b
     }

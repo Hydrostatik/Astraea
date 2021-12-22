@@ -36,13 +36,17 @@ extension Optional: Functor {
         }
     }
 
+    static func fmap <B>(_ a: Optional<A>, _ f: @escaping (A) -> B) -> Optional<B> {
+        f <&> a
+    }
+
     static func <& <T>(a: A, b: Optional<T>) -> Optional<A> {
         { _ in a } <&> b
     }
 }
 
 extension Optional: Applicative {
-    func pure(_ a: A) -> Optional<A> { .some(a) }
+    static func pure(_ a: A) -> Optional<A> { .some(a) }
 
     static func <*> <B>(a: Optional<(A) -> B>, b: Optional<A>) -> Optional<B> {
         switch a {
@@ -57,12 +61,12 @@ extension Optional: Applicative {
         f <&> a <*> b
     }
 
-    static func <* <A,B>(a: Optional<A>, b: Optional<B>) -> Optional<A> {
+    static func <* <B>(a: Optional<A>, b: Optional<B>) -> Optional<A> {
         liftA2({ input in { _ in input }}, a, b)
     }
 
-    static func *> <A,B>(a: Optional<A>, b: Optional<B>) -> Optional<B> {
-        liftA2({ input in { _ in input }}, b, a)
+    static func *> <B>(a: Optional<A>, b: Optional<B>) -> Optional<B> {
+        { x in x } <& a <*> b
     }
 }
 
