@@ -41,7 +41,7 @@ infix operator <*: AmapGroup
 /// ```
 /// u <*> pure y = pure { f in f(y) } <*> u
 /// ```
-protocol Applicative: Functor {
+public protocol Applicative: Functor {
 
     /// Embeds a pure expression inside itself. 
     static func pure(_ a: Self.A) -> Self

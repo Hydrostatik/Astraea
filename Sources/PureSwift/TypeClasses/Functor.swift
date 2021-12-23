@@ -26,16 +26,12 @@ infix operator <&: MapGroup
 /// ```
 /// fmap(value, f && g) = fmap(fmap(value, g), f)
 /// ```
-protocol Functor {
+public protocol Functor {
     associatedtype A
     static func <&> <B>(f: @escaping (A) -> B, a: Self) -> Self where Self.A == B
 }
 
-extension Functor {
-    static func fmap <B>(_ a: Self, _ f: @escaping (A) -> B) -> Self where Self.A == B {
-        f <&> a
-    }
-
+public extension Functor {
     /// **WARNING:** Do not use the default implementation
     /// Use the following:
     /// ``` swift

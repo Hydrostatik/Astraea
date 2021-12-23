@@ -5,11 +5,10 @@
 //  Created by Manaswi Daksha on 12/20/21.
 //
 
+import PureSwift
 import XCTest
-@testable import PureSwift
 
 final class OptionalExtensionTests: XCTestCase {
-
     func testSemigroup_AssociativityLaw() {
         XCTAssertEqual((Optional(1) <> Optional(2)) <> Optional(3), Optional(1) <> (Optional(2) <> Optional(3)))
         XCTAssertEqual(
@@ -39,6 +38,18 @@ final class OptionalExtensionTests: XCTestCase {
         XCTAssertEqual("This is Sparta" <& Optional.init <| 3, Optional.init <| "This is Sparta")
     }
 
+    func testFunctor_IdentityLaw() {
+        XCTAssertEqual({ x in x } <&> Optional("Sparta"), Optional("Sparta"))
+    }
+
+    func testFunctor_CompositionLaw() {
+        let f: (Int) -> String = { x in String.init <| x }
+        let g: (Bool) -> Int = { x in x ? 50 : 100 }
+        let x = Optional(false)
+
+        XCTAssertEqual((f <+ g) <&> x, f <&> (g <&> x))
+    }
+
     func testApplicativeFunctor_Pure() {
         XCTAssertEqual(Optional.pure <| 3, Optional.init <| 3)
     }
@@ -55,8 +66,16 @@ final class OptionalExtensionTests: XCTestCase {
         XCTAssertEqual(given <*> sut2, nil)
     }
 
+    func testApplicativeFunctor_LeftApply() {
+        XCTAssertEqual(Optional(4) <* Optional("String"), Optional(4))
+    }
+
+    func testApplicativeFunctor_RightApply() {
+        XCTAssertEqual(Optional(4) *> Optional("String"), Optional("String"))
+    }
+
     func testApplicativeFunctor_IdentityLaw() {
-        XCTAssertEqual(Optional.pure <| { x in x } <*> Optional.init <| 3, 3)
+        XCTAssertEqual(Optional.pure <| { x in x } <*> Optional.init <| 3, Optional(3))
     }
 
     func testApplicativeFunctor_CompositionLaw() {
@@ -75,12 +94,14 @@ final class OptionalExtensionTests: XCTestCase {
         XCTAssertEqual(Optional.init <| { x in x * 20 } <*> Optional.pure <| 30, Optional.pure <| { f in f <| 30 } <*> Optional.init <| { x in x * 20 })
     }
 
-    func testApplicativeFunctor_LeftApply() {
-        XCTAssertEqual(Optional(4) <* Optional("String"), Optional(4))
+    func testAlternativeFunctor_Empty() {
+        XCTAssertEqual(Optional<Int>.empty, nil)
     }
 
-    func testApplicativeFunctor_RightApply() {
-        XCTAssertEqual(Optional(4) *> Optional("String"), Optional("String"))
+    func testAlternativeFunctor_PipeOnFail() {
+        XCTAssertEqual(Optional(3) <|> nil, Optional(3))
+        XCTAssertEqual(nil <|> Optional("This"), Optional("This"))
+        XCTAssertEqual(Optional(8) <|> Optional(7), Optional(8))
     }
 }
 

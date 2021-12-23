@@ -24,11 +24,11 @@
 /// ```
 /// (a <> b) <> c == a <> (b <> c)
 /// ```
-protocol Monoid: Semigroup {
+public protocol Monoid: Semigroup {
     static var mempty: Self { get }
 }
 
-extension Monoid {
+public extension Monoid {
     static func mconcat(_ vals: [Self]) -> Self {
         vals.reduce(mempty, <>)
     }

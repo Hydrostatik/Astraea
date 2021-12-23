@@ -11,14 +11,14 @@ precedencegroup PipeGroup {
     lowerThan: MultiplicationPrecedence
 }
 infix operator <|: PipeGroup
-func <| <A,B>(f: (A) -> B, a: A) -> B { f(a) }
+public func <| <A,B>(f: (A) -> B, a: A) -> B { f(a) }
 
 precedencegroup ComposeGroup {
     associativity: right
     higherThan: SemigroupGroup
 }
 infix operator <+ : ComposeGroup
-func <+ <A,B,C>(g: @escaping (B) -> C, f: @escaping (A) -> B) -> ((A) -> C) {
+public func <+ <A,B,C>(g: @escaping (B) -> C, f: @escaping (A) -> B) -> ((A) -> C) {
     { a in
         g(f(a))
     }

@@ -7,7 +7,7 @@
 
 infix operator <|>: AmapGroup
 /// An **Alternative Functor** has more structure than an **Applicative Functor**.
-protocol Alternative: Applicative {
+public protocol Alternative: Applicative {
     /// Represents a computation with no valid results
     static var empty: Self { get }
 

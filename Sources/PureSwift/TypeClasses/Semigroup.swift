@@ -24,13 +24,13 @@ infix operator <>
 /// **NOTES:**
 ///
 /// * Wrappers will always be associative if the wrapped type is a Semigroup and also associative
-/// * Check the implementation of Optional to see how to conform to Semigroup on Types that wrap. 
-protocol Semigroup {
+/// * Check the implementation of Optional to see how to conform to Semigroup on Types that wrap.
+public protocol Semigroup {
     /// The "combine" operator
     static func <>(a: Self, b: Self) -> Self
 }
 
-extension Semigroup {
+public extension Semigroup {
     /// Prefix synonym of the infix operator <>
     static func combine(_ a: Self,_ b: Self) -> Self { a <> b }
 }
