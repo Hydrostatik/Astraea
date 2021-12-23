@@ -1,3 +1,3 @@
-# PureSwift
+# Astraea
 ## A functional Swift library.
  

@@ -5,7 +5,7 @@
 //  Created by Manaswi Daksha on 12/20/21.
 //
 
-import PureSwift
+import Astraea
 import XCTest
 
 final class OptionalExtensionTests: XCTestCase {
