@@ -28,8 +28,11 @@ public protocol Monoid: Semigroup {
     static var mempty: Self { get }
 }
 
-public extension Monoid {
-    static func mconcat(_ vals: [Self]) -> Self {
-        vals.reduce(mempty, <>)
+extension Astraea {
+    /// Generalizes `.reduce([], +)` or `.reduce(0,+)` to work for all **Monoids**.
+    ///
+    /// Check the **Monoid** documentation to see relevant requirements and laws.
+    public static func mconcat<A: Monoid>(_ vals: [A]) -> A {
+        vals.reduce(A.mempty, <>)
     }
 }

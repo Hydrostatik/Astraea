@@ -9,6 +9,8 @@ import Astraea
 import XCTest
 
 final class ArrayExtensionTests: XCTestCase {
+    typealias A = Astraea
+
     func testSemigroup_AssociativityLaw() {
         let a = [1]
         let b = [2]
@@ -24,7 +26,7 @@ final class ArrayExtensionTests: XCTestCase {
     func testMonoid_MConcat() {
         let a = [[1], [2], [3,4], [5,6,7]]
         let b = [1,2,3,4,5,6,7]
-        XCTAssertEqual(Array.mconcat(a), b)
+        XCTAssertEqual(A.mconcat(a), b)
     }
 
     func testMonoid_IdentityLaw() {
@@ -37,7 +39,7 @@ final class ArrayExtensionTests: XCTestCase {
         let b = ["3"]
 
         XCTAssertEqual(String.init <&> a, b)
-        XCTAssertEqual(Array.fmap(a) { x in String.init <| x }, b)
+        XCTAssertEqual(A.fmap(a) { x in String.init <| x }, b)
     }
 
     func testFunctor_ReplaceMap() {
@@ -46,6 +48,7 @@ final class ArrayExtensionTests: XCTestCase {
         let c = [[4,5,6], [4,5,6], [4,5,6]]
 
         XCTAssertEqual(a <& b, c)
+        XCTAssertEqual(A.rmap(a, b), c)
     }
 
     func testFunctor_IdentityLaw() {
@@ -77,7 +80,9 @@ final class ArrayExtensionTests: XCTestCase {
         let b: Array<Int> = []
 
         XCTAssertEqual(f <*> a, ["16"])
+        XCTAssertEqual(A.amap(f, a), ["16"])
         XCTAssertEqual(f <*> b, [])
+        XCTAssertEqual(A.amap(f, b), [])
     }
 
     func testApplicativeFunctor_LeftApply() {
@@ -85,6 +90,7 @@ final class ArrayExtensionTests: XCTestCase {
         let b = ["String"]
 
         XCTAssertEqual(a <* b, a)
+        XCTAssertEqual(A.left(a, b), a)
     }
 
     func testApplicativeFunctor_RightApply() {
@@ -92,6 +98,7 @@ final class ArrayExtensionTests: XCTestCase {
         let b = ["String"]
 
         XCTAssertEqual(a *> b, b)
+        XCTAssertEqual(A.right(a, b), b)
     }
 
     func testApplicativeFunctor_IdentityLaw() {
@@ -125,8 +132,10 @@ final class ArrayExtensionTests: XCTestCase {
     }
 
     func testAlternativeFunctor_PipeOnFail() {
-        XCTAssertEqual([3] <|> nil, [3])
-        XCTAssertEqual(nil <|> ["This"], ["This"])
+        XCTAssertEqual([3] <|> [], [3])
+        XCTAssertEqual([] <|> ["This"], ["This"])
         XCTAssertEqual([8] <|> [7], [8])
+        XCTAssertEqual(Array<Int>.empty <|> Array<Int>.empty, [])
+        XCTAssertEqual(A.alt([], [8]), [8])
     }
 }

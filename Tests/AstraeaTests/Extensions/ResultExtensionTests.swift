@@ -9,6 +9,8 @@ import Astraea
 import XCTest
 
 final class ResultExtensionTests: XCTestCase {
+    typealias A = Astraea
+
     func testSemigroup_AssociativityLaw() {
         let a: Result<Int, MockError> = .success(1)
         let b: Result<Int, MockError> = .success(2)
@@ -16,7 +18,7 @@ final class ResultExtensionTests: XCTestCase {
 
         XCTAssertEqual((a <> b) <> c, a <> (b <> c))
         XCTAssertEqual(
-            Result<Int, MockError>.combine(Result<Int, MockError>.combine(a, b), c), Result<Int, MockError>.combine(a, Result<Int, MockError>.combine(b, c))
+            A.combine(A.combine(a, b), c), A.combine(a, A.combine(b, c))
         )
     }
 
@@ -25,7 +27,7 @@ final class ResultExtensionTests: XCTestCase {
         let b: Result<String, MockError> = .success("200")
 
         XCTAssertEqual({ x in String.init <| 20 * x } <&> a, b)
-        XCTAssertEqual(Result.fmap(a) { x in String.init <| 20 * x }, b)
+        XCTAssertEqual(A.fmap(a) { x in String.init <| 20 * x }, b)
     }
 
     func testFunctor_ReplaceMap() {
@@ -34,6 +36,7 @@ final class ResultExtensionTests: XCTestCase {
         let c: Result<String, MockError> = .success(b)
 
         XCTAssertEqual(b <& a, c)
+        XCTAssertEqual(A.rmap(b, a), c)
     }
 
     func testFunctor_IdentityLaw() {
@@ -65,7 +68,9 @@ final class ResultExtensionTests: XCTestCase {
         let b: Result<Int, MockError> = .failure(.someRandomError)
 
         XCTAssertEqual(f <*> a, .success("16"))
+        XCTAssertEqual(A.amap(f, a), .success("16"))
         XCTAssertEqual(f <*> b, .failure(.someRandomError))
+        XCTAssertEqual(A.amap(f, b), .failure(.someRandomError))
     }
 
     func testApplicativeFunctor_LeftApply() {
@@ -73,6 +78,7 @@ final class ResultExtensionTests: XCTestCase {
         let b: Result<String, MockError> = .success("String")
 
         XCTAssertEqual(a <* b, a)
+        XCTAssertEqual(A.left(a, b), a)
     }
 
     func testApplicativeFunctor_RightApply() {
@@ -80,6 +86,7 @@ final class ResultExtensionTests: XCTestCase {
         let b: Result<String, MockError> = .success("String")
 
         XCTAssertEqual(a *> b, b)
+        XCTAssertEqual(A.right(a, b), b)
     }
 
     func testApplicativeFunctor_IdentityLaw() {

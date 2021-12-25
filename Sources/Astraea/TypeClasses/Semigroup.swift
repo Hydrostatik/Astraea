@@ -30,7 +30,9 @@ public protocol Semigroup {
     static func <>(a: Self, b: Self) -> Self
 }
 
-public extension Semigroup {
-    /// Prefix synonym of the infix operator <>
-    static func combine(_ a: Self,_ b: Self) -> Self { a <> b }
+extension Astraea {
+    /// Prefix synonym of the infix operator `<>`.
+    ///
+    /// Check the **Semigroup** documentation to see relevant requirements and laws.
+    public static func combine<A: Semigroup>(_ a: A,_ b: A) -> A { a <> b }
 }

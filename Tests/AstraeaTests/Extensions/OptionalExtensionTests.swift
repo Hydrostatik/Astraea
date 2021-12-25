@@ -9,11 +9,12 @@ import Astraea
 import XCTest
 
 final class OptionalExtensionTests: XCTestCase {
+    typealias A = Astraea
     func testSemigroup_AssociativityLaw() {
         XCTAssertEqual((Optional(1) <> Optional(2)) <> Optional(3), Optional(1) <> (Optional(2) <> Optional(3)))
         XCTAssertEqual(
-            Optional<Int>.combine(Optional<Int>.combine(Optional(1), Optional(2)), Optional(3)),
-            Optional<Int>.combine(Optional(1), Optional<Int>.combine(Optional(2), Optional(3)))
+            A.combine(A.combine(Optional(1), Optional(2)), Optional(3)),
+            A.combine(Optional(1), A.combine(Optional(2), Optional(3)))
         )
     }
 
@@ -22,7 +23,7 @@ final class OptionalExtensionTests: XCTestCase {
     }
 
     func testMonoid_MConcat() {
-        XCTAssertEqual(Optional.mconcat([Optional(1), Optional(2), nil, Optional(3), Optional(4), nil]), Optional(10))
+        XCTAssertEqual(A.mconcat([Optional(1), Optional(2), nil, Optional(3), Optional(4), nil]), Optional(10))
     }
 
     func testMonoid_IdentityLaw() {
@@ -31,11 +32,12 @@ final class OptionalExtensionTests: XCTestCase {
 
     func testFunctor_Fmap() {
         XCTAssertEqual(String.init <&> Optional(3), Optional("3"))
-        XCTAssertEqual(Optional.fmap(Optional(3)) { x in String.init <| x } , Optional("3"))
+        XCTAssertEqual(A.fmap(Optional(3)) { x in String.init <| x } , Optional("3"))
     }
 
     func testFunctor_ReplaceMap() {
         XCTAssertEqual("This is Sparta" <& Optional.init <| 3, Optional.init <| "This is Sparta")
+        XCTAssertEqual(A.rmap("This is Sparta", Optional(3)), Optional("This is Sparta"))
     }
 
     func testFunctor_IdentityLaw() {
@@ -63,15 +65,19 @@ final class OptionalExtensionTests: XCTestCase {
         let sut2: Optional<Int> = nil
 
         XCTAssertEqual(given <*> sut1, "16")
+        XCTAssertEqual(A.amap(given, sut1), "16")
         XCTAssertEqual(given <*> sut2, nil)
+        XCTAssertEqual(A.amap(given, sut2), nil)
     }
 
     func testApplicativeFunctor_LeftApply() {
         XCTAssertEqual(Optional(4) <* Optional("String"), Optional(4))
+        XCTAssertEqual(A.left(Optional(4), Optional("String")), Optional(4))
     }
 
     func testApplicativeFunctor_RightApply() {
         XCTAssertEqual(Optional(4) *> Optional("String"), Optional("String"))
+        XCTAssertEqual(A.right(Optional(4), Optional("String")), Optional("String"))
     }
 
     func testApplicativeFunctor_IdentityLaw() {
@@ -102,6 +108,7 @@ final class OptionalExtensionTests: XCTestCase {
         XCTAssertEqual(Optional(3) <|> nil, Optional(3))
         XCTAssertEqual(nil <|> Optional("This"), Optional("This"))
         XCTAssertEqual(Optional(8) <|> Optional(7), Optional(8))
+        XCTAssertEqual(A.alt(nil, Optional("This")), Optional("This"))
     }
 }
 

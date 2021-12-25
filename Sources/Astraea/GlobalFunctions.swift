@@ -8,7 +8,7 @@
 precedencegroup PipeGroup {
     associativity: right
     higherThan: MapGroup
-    lowerThan: MultiplicationPrecedence
+    lowerThan: LogicalConjunctionPrecedence
 }
 infix operator <|: PipeGroup
 public func <| <A,B>(f: (A) -> B, a: A) -> B { f(a) }
@@ -18,8 +18,8 @@ precedencegroup ComposeGroup {
     higherThan: SemigroupGroup
 }
 infix operator <+ : ComposeGroup
-public func <+ <A,B,C>(g: @escaping (B) -> C, f: @escaping (A) -> B) -> ((A) -> C) {
+public func <+ <A,B,C>(f: @escaping (B) -> C, g: @escaping (A) -> B) -> ((A) -> C) {
     { a in
-        g(f(a))
+        f(g(a))
     }
 }

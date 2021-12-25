@@ -36,16 +36,13 @@ extension Optional: Functor {
         }
     }
 
-    public static func fmap <B>(_ a: Optional<A>, _ f: @escaping (A) -> B) -> Optional<B> {
-        f <&> a
-    }
-
     public static func <& <B>(a: A, b: Optional<B>) -> Optional<A> {
         { _ in a } <&> b
     }
 }
 
 extension Optional: Applicative {
+    /// Wraps a value inside the Optional context.
     public static func pure(_ a: A) -> Optional<A> { .some(a) }
 
     public static func <*> <B>(a: Optional<(A) -> B>, b: Optional<A>) -> Optional<B> {
@@ -57,12 +54,8 @@ extension Optional: Applicative {
         }
     }
 
-    public static func liftA2 <A,B,C>(_ f: @escaping (A) -> ((B) -> C), _ a: Optional<A>, _ b: Optional<B>) -> Optional<C> {
-        f <&> a <*> b
-    }
-
     public static func <* <B>(a: Optional<A>, b: Optional<B>) -> Optional<A> {
-        liftA2({ input in { _ in input }}, a, b)
+        Astraea.liftA2({ input in { _ in input }}, a, b)
     }
 
     public static func *> <B>(a: Optional<A>, b: Optional<B>) -> Optional<B> {
@@ -83,4 +76,33 @@ extension Optional: Alternative {
             return nil
         }
     }
+}
+
+extension Astraea {
+    /// Prefix synonym of the `<&>` operator. Transforms a wrapped value given a function; analagous to `map` for Array.
+    ///
+    /// Check the **Functor** documentation to see relevant requirements and laws.
+    public static func fmap<A,B>(_ a: Optional<A>, _ f: @escaping (A) -> B) -> Optional<B> { f <&> a }
+
+    /// Prefix synonym of the `<&` operator. Replaces a wrapped value with another value.
+    public static func rmap<A,B>(_ a: A, _ b: Optional<B>) -> Optional<A> { a <& b }
+
+    /// Prefix synonym of the `<*>` operator. Applies a wrapped transformation to a wrapped value.
+    ///
+    /// Check the **Applicative Functor** documentation to see relevant requirements and laws.
+    public static func amap<A,B>(_ a: Optional<(A) -> B>, _ b: Optional<A>) -> Optional<B> { a <*> b }
+
+    /// Lifts wrapped values of type A, B out of their context, applies the transformation and returns a wrapped value.
+    public static func liftA2 <A,B,C>(_ f: @escaping (A) -> ((B) -> C), _ a: Optional<A>, _ b: Optional<B>) -> Optional<C> { f <&> a <*> b }
+
+    /// Computes a and b, ignores the output of b and returns a
+    public static func left<A,B>(_ a: Optional<A>, _ b: Optional<B>) -> Optional<A> { a <* b }
+
+    /// Computes a and b, ignores the output of a and return b
+    public static func right<A,B>(_ a: Optional<A>, _ b: Optional<B>) -> Optional<B> { a *> b }
+
+    /// Returns the first non-nil value, if both nil, then returns nil.
+    ///
+    /// Check the **Alternative Functor** documentation to see relevant requirements and laws.
+    public static func alt<A>(_ a: Optional<A>, _ b: Optional<A>) -> Optional<A> { a <|> b }
 }

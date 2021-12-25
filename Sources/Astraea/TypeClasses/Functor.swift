@@ -30,16 +30,3 @@ public protocol Functor {
     associatedtype A
     static func <&> <B>(f: @escaping (A) -> B, a: Self) -> Self where Self.A == B
 }
-
-public extension Functor {
-    /// **WARNING:** Do not use the default implementation
-    /// Use the following:
-    /// ``` swift
-    /// static func <& <T>(a: A, b: Optional<T>) -> Optional<A> {
-    ///     { _ in a } <&> b
-    /// }
-    /// ```
-    static func <& (a: Self.A, b: Self) -> Self {
-        { _ in a } <&> b
-    }
-}
