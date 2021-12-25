@@ -55,7 +55,7 @@ extension Result: Applicative {
     }
 
     public static func *> <B>(a: Result<A, Failure>, b: Result<B, Failure>) -> Result<B, Failure> {
-        { x in x } <& a <*> b
+        Astraea.id <& a <*> b
     }
 }
 

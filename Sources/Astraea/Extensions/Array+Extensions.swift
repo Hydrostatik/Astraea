@@ -39,7 +39,7 @@ extension Array: Applicative {
     }
 
     public static func *> <B>(a: Array<A>, b: Array<B>) -> Array<B> {
-        { x in x } <& a <*> b
+        Astraea.id <& a <*> b
     }
 }
 

@@ -52,4 +52,48 @@ final class AstraeaTests: XCTestCase {
             && ({ (_,y) in y } <&> expected) == ({ (_,y) in y } <&> output)
         )
     }
+
+    func testID() {
+        let a = "String"
+        let b = 2
+        let c = 2.34
+        let d = [2]
+        let e = Optional("Something")
+
+        XCTAssertEqual(A.id(a), a)
+        XCTAssertEqual(A.id(b), b)
+        XCTAssertEqual(A.id(c), c)
+        XCTAssertEqual(A.id(d), d)
+        XCTAssertEqual(A.id(e), e)
+    }
+
+    func testConst() {
+        let a = "String"
+        let b = 2
+        let c = [2]
+        let d = Optional("Something")
+
+        XCTAssertEqual(A.const(a, b), a)
+        XCTAssertEqual(A.const(c, d), c)
+    }
+
+    func testCurry() {
+        func f(val: (String, String)) -> String {
+            val.0 + val.1
+        }
+
+        XCTAssertEqual(A.curry("This is ", "Sparta", f), "This is Sparta")
+    }
+
+    func testUncurry() {
+        let f: (String, String) -> String = { x, y in x + y }
+
+        XCTAssertEqual(A.uncurry(("This is ", "Sparta"), f), "This is Sparta")
+    }
+
+    func testUncurry3() {
+        let f: (Int, Int, Int) -> Int = { x, y, z in x + y * z }
+
+        XCTAssertEqual(A.uncurry3((1,4,5), f), 21)
+    }
 }

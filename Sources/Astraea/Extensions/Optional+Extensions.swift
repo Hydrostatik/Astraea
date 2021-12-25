@@ -59,7 +59,7 @@ extension Optional: Applicative {
     }
 
     public static func *> <B>(a: Optional<A>, b: Optional<B>) -> Optional<B> {
-        { x in x } <& a <*> b
+        Astraea.id <& a <*> b
     }
 }
 
