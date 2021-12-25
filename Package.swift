@@ -23,6 +23,10 @@ let package = Package(
             name: "Astraea",
             dependencies: []
         ),
+        .executableTarget(
+            name: "FJSON",
+            dependencies: ["Astraea"]
+        ),
         .testTarget(
             name: "AstraeaTests",
             dependencies: ["Astraea"]
