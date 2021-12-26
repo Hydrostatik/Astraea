@@ -10,7 +10,9 @@ import XCTest
 
 final class GlobalFunctionsTests: XCTestCase {
     func testPipeLeft() {
-        XCTAssertEqual( { x in "This is the value: \(x)" } <| String.init <| { x in 20 * x } <| 20, "This is the value: 400")
+        XCTAssertEqual({ x in "This is the value: \(x)" } <| String.init <| { x in 20 * x } <| 20,
+            "This is the value: 400"
+        )
     }
 
     func testComposeLeft() {

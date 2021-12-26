@@ -33,9 +33,11 @@
         f(val.0, val.1, val.2)
     }
 
-    /// Applies the predicate to an array and returns a tuple where the first element is the longest prefix (possibly empty) of
-    /// elements that satisfy the predicate. the second element is the remainder of the array.
-    public static func span<Element>(_ array: Array<Element>, _ predicate: @escaping (Element) -> Bool) -> (Array<Element>, Array<Element>) {
+    /// Applies the predicate to an array and returns a tuple where the first element
+    /// is the longest prefix (possibly empty) of elements that satisfy the predicate.
+    /// The second element is the remainder of the array.
+    public static func span<Element>(_ array: Array<Element>,
+                                     _ predicate: @escaping (Element) -> Bool) -> (Array<Element>, Array<Element>) {
         let newPredicate = { x in !x } <+ predicate
         if let firstIndex = array.firstIndex(where: newPredicate) {
             return (Array(array[..<firstIndex]), Array(array[firstIndex...]))
@@ -43,9 +45,11 @@
         return (array, [])
     }
 
-    /// Applies the predicate to a string and returns a tuple where the first element is the longest prefix (possibly "")
-    /// that satisfies the predicate. the second element is the remainder of the string.
-    public static func span(_ array: String, _ predicate: @escaping (Character) -> Bool) -> (String, String) {
+    /// Applies the predicate to a string and returns a tuple where the first element is
+    /// the longest prefix (possibly "") that satisfies the predicate.
+    /// The second element is the remainder of the string.
+    public static func span(_ array: String,
+                            _ predicate: @escaping (Character) -> Bool) -> (String, String) {
         let newPredicate = { x in !x } <+ predicate
         if let firstIndex = array.firstIndex(where: newPredicate) {
             return (String(array[..<firstIndex]), String(array[firstIndex...]))

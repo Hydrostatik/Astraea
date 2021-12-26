@@ -105,7 +105,8 @@ final class ResultExtensionTests: XCTestCase {
 
     func testApplicativeFunctor_HomomorphismLaw() {
         XCTAssertEqual(
-            Result.pure { (x: Int) in Double.init <| 2 * x } <*> Result.pure <| 3, Result<Double, MockError>.pure <| { (x: Int) in Double.init <| 2 * x } <| 3
+            Result.pure { (x: Int) in Double.init <| 2 * x } <*> Result.pure <| 3,
+            Result<Double, MockError>.pure <| { (x: Int) in Double.init <| 2 * x } <| 3
         )
     }
 

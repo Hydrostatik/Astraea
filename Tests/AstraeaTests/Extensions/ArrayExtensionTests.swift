@@ -72,7 +72,7 @@ final class ArrayExtensionTests: XCTestCase {
     }
 
     func testApplicativeFunctor_Amap() {
-        let f: Array<(Int) -> String> = [{ x in
+        let f: Array<(Int) -> String> = [ { x in
             String.init <| 4 * x
         }]
 
@@ -108,8 +108,8 @@ final class ArrayExtensionTests: XCTestCase {
     }
 
     func testApplicativeFunctor_CompositionLaw() {
-        let f: Array<(String) -> Bool> = [{ x in x.count > 3 }]
-        let g: Array<(Int) -> String> = [{ x in String.init <| 80 * x }]
+        let f: Array<(String) -> Bool> = [ { x in x.count > 3 }]
+        let g: Array<(Int) -> String> = [ { x in String.init <| 80 * x }]
         let x: Array<Int> = [20]
 
         XCTAssertEqual(Array.pure <| { f in { g in f <+ g }} <*> f <*> g <*> x, f <*> (g <*> x))
@@ -117,12 +117,13 @@ final class ArrayExtensionTests: XCTestCase {
 
     func testApplicativeFunctor_HomomorphismLaw() {
         XCTAssertEqual(
-            Array.pure { (x: Int) in Double.init <| 2 * x } <*> Array.pure <| 3, Array.pure <| { (x: Int) in Double.init <| 2 * x } <| 3
+            Array.pure { (x: Int) in Double.init <| 2 * x } <*> Array.pure <| 3,
+            Array.pure <| { (x: Int) in Double.init <| 2 * x } <| 3
         )
     }
 
     func testApplicativeFunctor_InterchangeLaw() {
-        let f: Array<(Int) -> Int> = [{ x in x * 20 }]
+        let f: Array<(Int) -> Int> = [ { x in x * 20 }]
 
         XCTAssertEqual(f <*> Array.pure <| 30, Array.pure <| { f in f <| 30 } <*> f)
     }

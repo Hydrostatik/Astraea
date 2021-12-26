@@ -72,10 +72,12 @@ extension Parser: Applicative {
     }
 
     static func <*> <B>(a: Parser<(A) -> B>, b: Parser<A>) -> Parser<B> {
-        Parser<B>.init <| { val in ({ (x,f) in (f <&> b).runParser(x) } <&> val) as? (String, B) } <+ a.runParser
+        Parser<B>.init
+        <| { val in ({ (x,f) in (f <&> b).runParser(x) } <&> val) as? (String, B) } <+ a.runParser
     }
 
-    static func liftA2 <A,B,C>(_ f: @escaping (A) -> ((B) -> C), _ a: Parser<A>, _ b: Parser<B>) -> Parser<C> { f <&> a <*> b }
+    static func liftA2 <A,B,C>(_ f: @escaping (A) -> ((B) -> C),
+                               _ a: Parser<A>, _ b: Parser<B>) -> Parser<C> { f <&> a <*> b }
 
     static func <* <B>(a: Parser<A>, b: Parser<B>) -> Parser<A> {
         liftA2({ input in { _ in input }}, a, b)
@@ -115,7 +117,9 @@ extension Parser {
         let a = a.reversed()
         let initial = Parser<[A]>.pure([])
         return a.reduce(initial) { acc, val in
-            Parser<([A])->[A]>.init <| { val in  { (x,y) in (x, { arr in  [y] + arr }) } <&> val } <+ val.runParser <*> acc
+            Parser<([A])->[A]>.init
+            <| { val in { (x,y) in (x, { arr in  [y] + arr }) } <&> val } <+ val.runParser
+            <*> acc
         }
     }
 }

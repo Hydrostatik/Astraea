@@ -58,7 +58,7 @@ final class OptionalExtensionTests: XCTestCase {
 
     func testApplicativeFunctor_Amap() {
         let given: Optional<(Int) -> String> = { x in
-            String.init <| 4 * x 
+            String.init <| 4 * x
         }
 
         let sut1: Optional<Int> = 4
@@ -89,15 +89,24 @@ final class OptionalExtensionTests: XCTestCase {
         let given2: Optional<(Int) -> String> = { x in String.init <| 80 * x }
         let given3: Optional<Int> = 20
 
-        XCTAssertEqual(Optional.pure <| { f in { g in f <+ g }} <*> given1 <*> given2 <*> given3, given1 <*> (given2 <*> given3))
+        XCTAssertEqual(
+            Optional.pure <| { f in { g in f <+ g }} <*> given1 <*> given2 <*> given3,
+            given1 <*> (given2 <*> given3)
+        )
     }
 
     func testApplicativeFunctor_HomomorphismLaw() {
-        XCTAssertEqual(Optional.pure <| { (x: Int) in Double.init <| 2 * x } <*> Optional.pure <| 3, Optional.pure <| { (x: Int) in Double.init <| 2 * x } <| 3)
+        XCTAssertEqual(
+            Optional.pure <| { (x: Int) in Double.init <| 2 * x } <*> Optional.pure <| 3,
+            Optional.pure <| { (x: Int) in Double.init <| 2 * x } <| 3
+        )
     }
 
     func testApplicativeFunctor_InterchangeLaw() {
-        XCTAssertEqual(Optional.init <| { x in x * 20 } <*> Optional.pure <| 30, Optional.pure <| { f in f <| 30 } <*> Optional.init <| { x in x * 20 })
+        XCTAssertEqual(
+            Optional.init <| { x in x * 20 } <*> Optional.pure <| 30,
+            Optional.pure <| { f in f <| 30 } <*> Optional.init <| { x in x * 20 }
+        )
     }
 
     func testAlternativeFunctor_Empty() {

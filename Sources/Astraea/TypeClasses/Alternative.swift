@@ -12,5 +12,5 @@ public protocol Alternative: Applicative {
     static var empty: Self { get }
 
     /// Combines two calculations and returns the first non-failing calculation or `empty` if all of them fail.
-    static func <|> (a: Self, b: Self) -> Self 
+    static func <|> (a: Self, b: Self) -> Self
 }

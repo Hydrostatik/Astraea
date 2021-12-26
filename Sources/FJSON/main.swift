@@ -39,7 +39,9 @@ let jsonString: Parser<JSONValue> = { x in JSONValue.string(x) } <&> (charP("\""
 
 let jsonBase: Parser<JSONValue> = jsonNull <|> jsonBool <|> jsonNumber <|> jsonString
 
-let jsonArray: Parser<JSONValue> = { x in JSONValue.array(x) } <&> (charP("[") *> whiteSpace *> sepBy(separator(","), jsonBase) <* whiteSpace <* charP("]"))
+let jsonArray: Parser<JSONValue> = { x in
+    JSONValue.array(x)
+} <&> (charP("[") *> whiteSpace *> sepBy(separator(","), jsonBase) <* whiteSpace <* charP("]"))
 
 let pairs: Parser<[String: JSONValue]> = .init { input in
     if let (rest , key) = (charP("\"") *> stringLiteral <* charP("\"")).runParser(input),
@@ -51,7 +53,7 @@ let pairs: Parser<[String: JSONValue]> = .init { input in
 }
 
 let jsonObject: Parser<JSONValue> = { x in
-    let merged = x.reduce([String: JSONValue](),  { acc, val in
+    let merged = x.reduce([String: JSONValue](), { acc, val in
         var initialDict = acc
         initialDict.merge(val) { current, _ in
             current
@@ -61,4 +63,8 @@ let jsonObject: Parser<JSONValue> = { x in
     return JSONValue.object(merged)
 } <&> (charP("{") *> whiteSpace *> sepBy(separator(","), pairs) <* whiteSpace <* charP("}"))
 
-print(jsonObject.runParser("{ \"key\" : \"value\" , \"OtherKey\": [2,3,4,5,6,7] , \"someInteger\" : 123234234 , \"someBoolean\" : true, \"somethingMissing\" : null }"))
+print(
+    jsonObject.runParser(
+        "{ \"key\" : \"value\",\"OtherKey\": [2,3,4],\"integer\":123234234,\"boolean\" : true, \"missing\" : null }"
+    )
+)

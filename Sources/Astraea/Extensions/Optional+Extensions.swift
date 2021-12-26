@@ -93,7 +93,9 @@ extension Astraea {
     public static func amap<A,B>(_ a: Optional<(A) -> B>, _ b: Optional<A>) -> Optional<B> { a <*> b }
 
     /// Lifts wrapped values of type A, B out of their context, applies the transformation and returns a wrapped value.
-    public static func liftA2 <A,B,C>(_ f: @escaping (A) -> ((B) -> C), _ a: Optional<A>, _ b: Optional<B>) -> Optional<C> { f <&> a <*> b }
+    public static func liftA2 <A,B,C>(_ f: @escaping (A) -> ((B) -> C),
+                                      _ a: Optional<A>,
+                                      _ b: Optional<B>) -> Optional<C> { f <&> a <*> b }
 
     /// Computes a and b, ignores the output of b and returns a
     public static func left<A,B>(_ a: Optional<A>, _ b: Optional<B>) -> Optional<A> { a <* b }

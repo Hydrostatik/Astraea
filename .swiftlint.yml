@@ -1,0 +1,10 @@
+disabled_rules:
+    - comma
+    - syntactic_sugar
+type_name:
+    min_length: 1
+identifier_name:
+    min_length: 1
+large_tuple:
+    warning: 5
+    error: 7

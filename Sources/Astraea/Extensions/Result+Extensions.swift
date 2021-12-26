@@ -63,24 +63,31 @@ extension Astraea {
     /// Prefix synonym of the `<&>` operator. Transforms a wrapped value given a function; analagous to `map` for Array.
     ///
     /// Check the **Functor** documentation to see relevant requirements and laws.
-    public static func fmap<A,Failure,B>(_ a: Result<A, Failure>, _ f: @escaping (A) -> B) -> Result<B, Failure> { f <&> a }
+    public static func fmap<A,Failure,B>(_ a: Result<A, Failure>,
+                                         _ f: @escaping (A) -> B) -> Result<B, Failure> { f <&> a }
 
     /// Prefix synonym of the `<&` operator. Replaces a wrapped value with another value.
-    public static func rmap<A,Failure,B>(_ a: A, _ b: Result<B,Failure>) -> Result<A,Failure> { a <& b }
+    public static func rmap<A,Failure,B>(_ a: A,
+                                         _ b: Result<B,Failure>) -> Result<A,Failure> { a <& b }
 
     /// Prefix synonym of the `<*>` operator. Applies a wrapped transformation to a wrapped value.
     ///
     /// Check the **Applicative Functor** documentation to see relevant requirements and laws.
-    public static func amap<A,Failure,B>(_ a: Result<(A) -> B, Failure>, _ b: Result<A, Failure>) -> Result<B, Failure> { a <*> b }
+    public static func amap<A,Failure,B>(_ a: Result<(A) -> B, Failure>,
+                                         _ b: Result<A, Failure>) -> Result<B, Failure> { a <*> b }
 
     /// Lifts wrapped values of type A, B out of their context, applies the transformation and returns a wrapped value.
-    public static func liftA2 <A,Failure,B,C>(_ f: @escaping (A) -> ((B) -> C), _ a: Result<A, Failure>, _ b: Result<B,Failure>) -> Result<C,Failure> {
+    public static func liftA2 <A,Failure,B,C>(_ f: @escaping (A) -> ((B) -> C),
+                                              _ a: Result<A, Failure>,
+                                              _ b: Result<B,Failure>) -> Result<C,Failure> {
         f <&> a <*> b
     }
 
     /// Computes a and b, ignores the output of b and returns a
-    public static func left<A,Failure,B>(_ a: Result<A,Failure>, _ b: Result<B,Failure>) -> Result<A,Failure> { a <* b }
+    public static func left<A,Failure,B>(_ a: Result<A,Failure>,
+                                         _ b: Result<B,Failure>) -> Result<A,Failure> { a <* b }
 
     /// Computes a and b, ignores the output of a and return b
-    public static func right<A,Failure,B>(_ a: Result<A,Failure>, _ b: Result<B, Failure>) -> Result<B, Failure> { a *> b }
+    public static func right<A,Failure,B>(_ a: Result<A,Failure>,
+                                          _ b: Result<B, Failure>) -> Result<B, Failure> { a *> b }
 }
