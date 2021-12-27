@@ -1,0 +1,27 @@
+name: Swift
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+  schedule: # triggering the jobs according to predefined schedules
+    - cron: 0 0 * * * # trigger once a day, according to the cron syntax
+
+jobs:
+  build:
+    name: Build and test Astraea
+    runs-on: macos-latest
+    steps:
+    - name: Checkout branch...
+      uses: actions/checkout@v2
+    - name: Build...
+      run: swift build -v
+    - name: Run tests...
+      run: swift test -v --enable-code-coverage
+    - name: Convert code coverage...
+      run: xcrun llvm-cov export -format="lcov" -instr-profile=$(find .build -name default.profdata) $(find .build -name AstraeaPackageTests) > info.lcov
+    - name: Code coverage...
+      uses: codecov/codecov-action@v2.1.0
+      with:
+        file: info.lcov
