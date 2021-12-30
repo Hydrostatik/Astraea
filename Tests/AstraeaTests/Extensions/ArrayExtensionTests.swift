@@ -139,4 +139,19 @@ final class ArrayExtensionTests: XCTestCase {
         XCTAssertEqual(Array<Int>.empty <|> Array<Int>.empty, [])
         XCTAssertEqual(A.alt([], [8]), [8])
     }
+
+    func testFoldable_foldMap() {
+        let container: [UInt8] = [1,2,3,3,4,5,5]
+        let f: (UInt8) -> Int = { x in Int(x) }
+
+        XCTAssertEqual(Array.foldMap(container, f), 23)
+    }
+
+    func testFoldable_fold() {
+        let container: [String] = ["This", "is", "Sparta"]
+        let f: (UInt, String) -> UInt = { x, y in x + UInt(y.count) }
+        let initial: UInt = 0
+
+        XCTAssertEqual(Array.fold(initial, container, f), 12)
+    }
 }

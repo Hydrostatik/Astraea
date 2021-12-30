@@ -126,3 +126,7 @@ extension Int: Semigroup {
         a + b
     }
 }
+
+extension Int: Monoid {
+    public static var mempty: Int { .zero }
+}

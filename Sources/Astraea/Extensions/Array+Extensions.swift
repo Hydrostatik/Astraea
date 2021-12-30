@@ -57,6 +57,19 @@ extension Array: Alternative {
     }
 }
 
+extension Array: Foldable {
+    public static func foldMap<B: Monoid>(_ a: Array<A>,
+                                   _ f: @escaping (A) -> B) -> B {
+        Astraea.mconcat <+ { x in Astraea.fmap(x, f) } <| a
+    }
+
+    public static func fold<B>(_ initial: B,
+                        _ container: Array<A>,
+                        _ f: (B, A) -> B) -> B {
+        container.reduce(initial, f)
+    }
+}
+
 extension Astraea {
     /// Prefix synonym of the `<&>` operator. Transforms a wrapped value given a function; analagous to `map` for Array.
     ///
