@@ -27,7 +27,7 @@ final class OptionalExtensionTests: XCTestCase {
     }
 
     func testMonoid_IdentityLaw() {
-        XCTAssertEqual(Optional(3) <> Optional<Int>.mempty, Optional<Int>.mempty <> Optional(3))
+        XCTAssertEqual(Optional(3) <> Optional<Int>.mempty, Optional(3))
     }
 
     func testFunctor_Fmap() {

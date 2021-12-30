@@ -31,7 +31,7 @@ final class ArrayExtensionTests: XCTestCase {
 
     func testMonoid_IdentityLaw() {
         let a = [1]
-        XCTAssertEqual(a <> Array.mempty, a <> Array.mempty)
+        XCTAssertEqual(a <> Array.mempty, a)
     }
 
     func testFunctor_Fmap() {
